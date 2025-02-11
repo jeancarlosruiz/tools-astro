@@ -1,3 +1,6 @@
+---
+import { ClientRouter } from "astro:transitions";
+---
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,14 +8,26 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+    <title>Astro Basics</title>
+    <ClientRouter />
 	</head>
-	<body class="app-container">
+  <body class="app-container">
+  <header
+      class="sticky top-0 z-10 flex items-center gap-3 bg-black-700 py-[20px] h-[5rem]"
+  >
+    <h2
+      class="mr-auto inline-flex cursor-pointer items-center gap-2 text-[1.25rem] font-bold tracking-[-0.020625em] text-[#014DFD] md:mr-0"
+    >
+      Jean Ruiz
+    </h2>
+    </header>
+    <main>
 		<slot />
+    </main>
 	</body>
 </html>
 
 <style is:global>
-@import "../styles/global.css"
+@import "../styles/global.css";
 </style>
 

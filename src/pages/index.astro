@@ -3,31 +3,18 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-  <header
-      class="sticky top-0 z-10 flex items-center gap-3 bg-black-700 py-[20px]"
-  >
-    <h2
-      class="mr-auto inline-flex cursor-pointer items-center gap-2 text-[1.25rem] font-bold tracking-[-0.020625em] text-[#014DFD] md:mr-0"
-    >
-      Jean Ruiz
-    </h2>
-  </header>
-  <main>
-    <header>
-      <h1 class="fs-title text-bold">Everyday tools!</h1>
+    <header class="flex items-center justify-center">
+      <h1 class="fs-title text-bold text-white">Everyday tools!</h1>
     </header>
     <section class="pt-[24px]">
         <nav class="flex flex-col gap-[1rem]">
-        <a href="/px-converter" class="px-[10px] py-[20px] bg-[var(--bg-input)]">
-            PX converter
-          </a>
-          <a href="/clamp" class="px-[10px] py-[20px] bg-[var(--bg-input)]">
-            Responsive Font Sizing
-          </a>
+      <a href="/px-rem" class="px-[10px] py-[20px] bg-(--bg-input) text-[1.2rem] text-bold text-center rounded-[10px] border-2 border-(--border-color)" transition:name="px-rem">
+            Px Converter
+      </a>
+      <a href="/clamp" class="px-[10px] py-[20px] bg-(--bg-input) text-[1.2rem] text-bold text-center rounded-[10px] border-2 border-(--border-color)" transition:name="clamp">
+        Responsive Font Sizing
+      </a>
         </nav>
-      </section>
-  </main>
+    </section>
 </Layout>
-
-
 
