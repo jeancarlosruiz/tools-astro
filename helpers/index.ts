@@ -143,3 +143,12 @@ export const convertionFunctions: { [key: string]: ConvertionFunc } = {
   "rem:rem": convertRemToRem,
   "em:em": convertEmToEm,
 };
+
+export const handleOnBlur = (
+  value: string,
+  setState: (value: SetStateAction<string>) => void,
+) => {
+  if (value === "0" || "") {
+    setState("16");
+  }
+};

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ClampConvertion from '../components/react/clampConverter'
 ---
 
 
@@ -8,5 +9,6 @@ import Layout from '../layouts/Layout.astro';
     <h2 class="fs-title-details text-bold text-white" transition:name="clamp">
       Responsive Font Sizing
     </h2>
+  <ClampConvertion client:load/>
   </section>
 </Layout>
