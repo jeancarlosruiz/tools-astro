@@ -1,0 +1,103 @@
+.inputWrapper {
+  --outer-br: 12px;
+  --padding-inline: 8px;
+  --padding-block: 10px;
+
+  min-height: 3rem;
+  width: 100%;
+  background-color: var(--bg-input);
+  padding-block: var(--padding-block);
+  padding-inline: var(--padding-inline);
+  border-radius: var(--outer-br);
+  gap: 0.625rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  border: none;
+  outline: transparent;
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: var(--input-fs);
+  background-color: transparent;
+  caret-color: var(--secondary-color);
+}
+
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"] {
+  -moz-appearance: textfield;
+  /* Firefox */
+}
+
+.selectTrigger {
+  --inner-br: calc(var(--padding-inline) * 0.75);
+
+  display: flex;
+  align-items: center;
+  width: 5rem;
+  min-height: 2.375rem;
+  font-weight: 700;
+
+  padding-block: 7px;
+  padding-inline: 8px;
+  background-color: var(--clr-green-400);
+
+  border: transparent;
+  border-radius: var(--inner-br);
+  color: var(--clr-black-600);
+  cursor: pointer;
+}
+
+.selectTrigger svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.selectTrigger:focus-visible {
+  outline: transparent;
+}
+
+.selectTrigger svg,
+.selectTriggerResult svg {
+  margin-inline-start: auto;
+}
+
+.selectContent {
+  --rigth-space: 24px;
+
+  width: 5rem;
+  right: var(--rigth-space);
+  background-color: var(--bg-input);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding-block: 7px;
+  border-radius: 4px;
+}
+
+.selectContent div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.selectItem {
+  cursor: pointer;
+  padding-inline: 8px;
+  padding-block: 4px;
+}
+
+.selectItem:hover {
+  outline: transparent;
+  background-color: var(--select-item-hover);
+}
+
+.selectItem:focus-visible {
+  outline: none;
+  background-color: var(--select-item-hover);
+}
