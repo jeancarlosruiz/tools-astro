@@ -7,5 +7,128 @@ import Layout from '../layouts/Layout.astro';
     <h2 class='fs-title-details text-bold text-white' transition:name='console'>
       JS Console
     </h2>
+
+    <!-- Editor JavaScript -->
+    <div id="js" class="w-full h-[40rem]"></div>
+    
+    <!-- Consola -->
+    <div id="console" class="mt-4 p-4 bg-gray-900 text-gray-100 rounded-lg">
+      <ul class="console-list space-y-2"></ul>
+    </div>
+
+    <!-- Iframe oculto para ejecución segura -->
+    <iframe id="sandbox" class="hidden"></iframe>
   </section>
 </Layout>
+
+<script>
+import * as monaco from 'monaco-editor'
+import JsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+
+// Configuración inicial
+const $ = (selector) => document.querySelector(selector)
+const $consoleList = $('#console .console-list')
+const $iframe = $('#sandbox')
+
+// Iconos para tipos de consola (simplificados)
+const CONSOLE_ICONS = {
+  'log': '▶',
+  'error': '⛔',
+  'warn': '⚠',
+  'info': 'ℹ'
+}
+
+window.MonacoEnvironment = {
+  getWorker(_, label) {
+    if(label === 'javascript') return new JsWorker()
+  }
+}
+
+// Helpers
+const isPrimitive = (item) => 
+  ['string', 'number', 'boolean', 'symbol', 'bigint'].includes(typeof item) || 
+  item === null || 
+  item === undefined
+
+const createListItem = (content, type = 'log') => {
+  const $li = document.createElement('li')
+  $li.className = `flex items-start gap-2 text-sm font-mono text-${type === 'error' ? 'red-400' : 'gray-300'}`
+  
+  const $icon = document.createElement('span')
+  $icon.textContent = CONSOLE_ICONS[type] || CONSOLE_ICONS.log
+  $li.appendChild($icon)
+  
+  const $content = document.createElement('pre')
+  $content.className = 'flex-1'
+  $content.textContent = content
+  $li.appendChild($content)
+  
+  return $li
+}
+
+// Manejadores de consola
+const consoleHandlers = {
+  log: (...args) => {
+    const content = args.map(arg => 
+      isPrimitive(arg) ? arg : JSON.stringify(arg)
+    ).join(' ')
+    
+    $consoleList.appendChild(createListItem(content, 'log'))
+  },
+  error: (error) => {
+    const content = error.message || error
+    const item = createListItem(content, 'error')
+    $consoleList.appendChild(item)
+  },
+  clear: () => {
+    $consoleList.innerHTML = ''
+  }
+}
+
+// Configurar el iframe para capturar logs
+const setupSandbox = () => {
+  const iframeDoc = $iframe.contentWindow.document
+  iframeDoc.open()
+  iframeDoc.write(`
+    <script>
+      // Override console methods
+      ${Object.keys(CONSOLE_ICONS).map(type => `
+        console.${type} = (...args) => {
+          window.parent.postMessage({
+            type: '${type}',
+            args: args
+          }, '*')
+        }
+      `).join('\n')}
+    <\/script>
+  `)
+  iframeDoc.close()
+}
+
+// Inicializar editor
+const jsEditor = monaco.editor.create($("#js"), {
+  value: 'console.log("¡Hola Mundo!")',
+  language: 'javascript',
+  theme: "vs-dark",
+  automaticLayout: true,
+  minimap: { enabled: false }
+})
+
+// Ejecutar código en el iframe
+jsEditor.onDidChangeModelContent(() => {
+  try {
+    $iframe.contentWindow.eval(jsEditor.getValue())
+  } catch (error) {
+    consoleHandlers.error(error)
+  }
+})
+
+// Escuchar mensajes del iframe
+window.addEventListener('message', (e) => {
+  if (e.source !== $iframe.contentWindow) return
+  consoleHandlers[e.data.type]?.(...e.data.args)
+})
+
+// Inicializar
+setupSandbox()
+</script>
